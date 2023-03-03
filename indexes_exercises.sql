@@ -84,5 +84,72 @@ describe ymir_jeremy.albums;
 describe users;
 
 SELECT *
+FROM users;
+# foreign key is inherited from roles below
+
+SELECT *
 FROM users
 WHERE role_id IS NOT NULL;
+
+SELECT *
+FROM users
+         JOIN roles ON users.role_id = roles.id;
+
+select *
+from users as u
+    inner join users as r on u.role_id = r.id;
+
+select u.id, u.name, u.email, roles.name
+from users as u
+    JOIN roles ON u.role_id = roles.id
+    inner join users as r on u.role_id = r.id;
+
+SELECT *
+FROM users as u
+    LEFT JOIN roles as r on u.role_id = r.id;
+
+SELECT *
+FROM users as u
+    LEFT JOIN roles as r on u.role_id = r.id
+where role_id is null;
+
+# exclusive left join
+SELECT *
+FROM users as u
+    LEFT JOIN roles as r on u.role_id = r.id
+where u.role_id is null;
+
+# multiple roles
+# SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, d.dept_name
+# FROM employees as e
+#          JOIN dept_emp as de
+#               ON de.emp_no = e.emp_no
+#          JOIN departments as d
+#               ON d.dept_no = de.dept_no
+# WHERE de.to_date = '9999-01-01' AND e.emp_no = 10001;
+
+
+# Insert 4 new users into the database. One should have a NULL role. The other three should be authors.
+#
+#     Use JOIN, LEFT JOIN, and RIGHT JOIN to combine results from the users and roles tables as we did in the lesson. Before you run each query, guess the expected number of results.
+#
+#     Although not explicitly covered in the lesson, aggregate functions like count can be used with join queries. Use COUNT and the appropriate join type to get a list of roles along with the number of users that have a given role. Hint: You will also need to use GROUP BY in the query.
+#
+
+SELECT *
+FROM users;
+
+# INSERT INTO users (name,email)
+# #     VALUES ('jeremy','jeremy@jeremy.com')
+#     VALUES ('kenzi','kenzi@kenzi.com'),
+#     ('matty','matty@matty.com'),
+#     ('rosie','rosie@rosie.com')
+# ;
+
+# UPDATE users (role_id)
+# SET roles = 'Samuel', author_last_name = 'Clemens'
+# WHERE id = 4;
+#
+# DROP *
+#     FROM users
+#     WHERE id > 11;
