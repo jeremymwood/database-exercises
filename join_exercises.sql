@@ -30,6 +30,7 @@ FROM employees as e
               ON d.dept_no = m.dept_no
 where year(to_date) > year(now()) AND e.gender = 'F';
 
+# mine
 SELECT DISTINCT t.title
 FROM employees as e
      JOIN titles as t
@@ -37,30 +38,38 @@ FROM employees as e
      JOIN departments as d
           ON d.dept_no = 'd009'
 WHERE year(to_date) > year(now());
-#
-# +--------------------+-------+
-# | title              | Total |
-# +--------------------+-------+
-# | Senior Staff       | 11268 |
-# | Staff              |  3574 |
-# | Senior Engineer    |  1790 |
-# | Engineer           |   627 |
-# | Technique Leader   |   241 |
-# | Assistant Engineer |    68 |
-# | Manager            |     1 |
-# +--------------------+-------+
 
-# Find the current salary of all current managers.
-SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name, s.salary
-FROM employees as e
-     JOIN dept_manager as m
-          ON m.emp_no = e.emp_no
-     JOIN departments as d
-          ON d.dept_no = m.dept_no
-     JOIN salaries as s
-          ON s.emp_no = e.emp_no
-WHERE year(s.to_date) > year(NOW())
-;
+# docs
+select t.title, count(e.emp_no) as Total
+from titles as t
+    inner join employees e on t.emp_no = e.emp_no
+    inner join dept_emp de on e.emp_no = de.emp_no
+    inner join departments d on de.dept_no = d.dept_no
+where t.to_date > now()
+and de.to_date > now()
+and d.dept_no = 'd009'
+group by t.title
+order by Total desc;
+
+# mine
+# SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name, s.salary
+# FROM employees as e
+#      JOIN dept_manager as m
+#           ON m.emp_no = e.emp_no
+#      JOIN departments as d
+#           ON d.dept_no = m.dept_no
+#      JOIN salaries as s
+#           ON s.emp_no = e.emp_no
+# WHERE year(s.to_date) > year(NOW())
+# ;
+
+select d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS 'Department Manager', s.salary
+from salaries s
+    inner join employees e on s.emp_no = e.emp_no
+    inner join dept_manager dm on e.emp_no = dm.emp_no
+    inner join departments d on dm.dept_no = d.dept_no
+where s.to_date > now()
+    and dm.to_date> now();
 
 # SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name
 # FROM employees as e
@@ -69,6 +78,9 @@ WHERE year(s.to_date) > year(NOW())
 #          JOIN departments as d
 #               ON d.dept_no = m.dept_no
 # where year(to_date) > year(now()) AND e.gender = 'F';
+
+
+
 #
 # +--------------------+--------------------+--------+
 # | Department Name    | Department Manager | Salary |
@@ -83,3 +95,29 @@ WHERE year(s.to_date) > year(NOW())
 # | Research           | Hilary Kambil      |  79393 |
 # | Sales              | Hauke Zhang        | 101987 |
 # +--------------------+--------------------+--------+
+use ymir_jeremy;
+# doc
+# select r.name, count(u.id)
+# from users as u
+#          inner join roles r on u.role_id = r.id
+# group by r.name;
+
+# may be better to join from taget field and up to employee, hight level
+select d.dept_name as 'Department Name',
+   CONCAT(e.first_name, ' ', e.last_name) AS 'Department Manager'
+from departments d
+    inner join dept_manager dm on d.dept_no = dm.dept_no
+    inner join employees e on dm.emp_no = e.emp_no
+where    dm.to_date = '9999-01-01';
+
+use ymir_employees;
+select CONCAT(e.first_name, ' ', e.last_name) AS 'Employee'
+     , d.dept_name
+     , CONCAT(e.first_name, ' ', e.last_name) AS 'Manager'
+from employees as e
+    inner join dept_emp de on e.emp_no = de.emp_no
+    inner join departments d on de.dept_no = d.dept_no
+    inner join dept_manager dm on d.dept_no = dm.dept_no
+    inner join employees e2 on dm.emp_no = e2.emp_no
+where de.to_date > now()
+    and dm.to_date > now();
