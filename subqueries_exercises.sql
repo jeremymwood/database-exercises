@@ -91,8 +91,13 @@ where e.emp_no in (
         select max(salary)
         ));
 
-select *
-from employees
-where salari = (
-    select Max(salary)
-    from employees );
+select e.first_name, e.last_name
+from employees e
+where e.emp_no = (
+    select s.emp_no
+    from salaries s
+    where s.salary in (
+        select max(salary)
+        from salaries
+        )
+    );
