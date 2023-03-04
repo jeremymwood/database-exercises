@@ -1,5 +1,13 @@
 use ymir_employees;
 
+SELECT first_name, last_name, birth_date
+FROM employees
+WHERE emp_no IN (
+    SELECT emp_no
+    FROM dept_manager
+) LIMIT 10;
+
+
 SELECT *
 FROM employees as e
 WHERE e.birth_date = (
@@ -54,3 +62,9 @@ from dept_manager dm2
 inner join employees e2 on dm2.emp_no = e2.emp_no
 WHERE dm2.to_date > now()
 AND e2.gender = 'F';
+
+SELECT hire_date, COUNT(*)
+FROM employees
+GROUP BY hire_date
+ORDER BY COUNT(*) DESC
+LIMIT 10;
