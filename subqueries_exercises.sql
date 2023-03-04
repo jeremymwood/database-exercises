@@ -27,31 +27,72 @@ order by COUNT(*);
 
 #current department managers, female.
 #join
-select e2.first_name, e2.last_name
-from dept_manager dm2
-inner join employees e2 on dm2.emp_no = e2.emp_no
-WHERE dm2.to_date > now()
-AND e2.gender = 'F';
+# select e.first_name, e.last_name
+# from dept_manager dm
+# inner join employees e on dm.emp_no = e.emp_no
+# WHERE dm.to_date > now()
+# AND e.gender = 'F';
 
+select e.first_name, e.last_name
+from employees e
+where e.emp_no in (
+    select dm.emp_no
+    from dept_manager dm
+    where dm.to_date > now()
+      and e.gender = 'F'
+    );
 
+select *
+from departments d
+where d.dept_no in (
+    select dm.dept_no
+    from dept_manager dm
+    where dm.to_date > now()
+#       and e.gender = 'F'
+    );
 
+select e.first_name, e.last_name
+from employees e
+where e.emp_no in (
+    select dm.emp_no
+    from dept_manager dm
+    where dm.to_date > now()
+      and e.gender = 'F'
+        and dm.dept_no in (
+            select d.dept_no
+            from departments d
+        )
+);
+
+select d.dept_name
+from departments d
+where d.dept_no in (
+    select dm.dept_no
+    from dept_manager dm
+    where dm.emp_no in (
+        select e.emp_no
+        from employees e
+        where e.gender = 'F'
+          and dm.to_date > now()
+        )
+    );
 # Find the first and last name of the employee with the highest salary.
-#
 # +------------+-----------+
 # | first_name | last_name |
 # +------------+-----------+
 # | Tokuyasu   | Pesch     |
 # +------------+-----------+
-SELECT hire_date, COUNT(*)
-FROM employees
-GROUP BY hire_date
-ORDER BY COUNT(*) DESC
-LIMIT 10;
+select e.first_name, e.last_name
+from employees e
+where e.emp_no in (
+    select s.emp_no
+    from salaries s
+    where salary in (
+        select max(salary)
+        ));
 
-# select e.first_name, e.last_name
-# from employees e
-# where e.emp_no = (
-#     select s.emp_no
-#     from salaries s
-#     order by s.salary desc
-#     limit 5 );
+select *
+from employees
+where salari = (
+    select Max(salary)
+    from employees );
