@@ -83,7 +83,7 @@ INSERT INTO quote_topic(quote_id, topic_id)
 VALUES (1, 2), (1, 3), (2, 4), (3, 1),
        (3, 2), (3, 3), (3, 4), (4, 2), (5, 1);
 
-select a.id, concat(a.first_name, ' ', a.last_name) 'full_name', q.content 'quote', t.name
+select a.id, concat(a.first_name, ' ', a.last_name) 'full name', q.content 'quote', t.name 'genre'
 from authors a
      inner join quotes q on a.id = q.author_id
      inner join topics t on a.id = t.id
