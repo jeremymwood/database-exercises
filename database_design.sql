@@ -55,3 +55,36 @@ select a.id, concat(a.first_name, ' ', a.last_name) 'full_name', q.content 'quot
 from authors a
     inner join quotes q on a.id = q.author_id
 order by a.id;
+
+CREATE TABLE topics (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO topics(name) VALUES
+    ('Space and Time'),
+    ('Humor'),
+    ('Office Life'),
+    ('Hitchiker''s Guide to the Galaxy');
+
+describe topics;
+select *
+from topics;
+
+CREATE TABLE quote_topic (
+    quote_id INTEGER UNSIGNED NOT NULL,
+    topic_id INTEGER UNSIGNED NOT NULL,
+    FOREIGN KEY (quote_id) REFERENCES quotes(id),
+    FOREIGN KEY (topic_id) REFERENCES topics(id)
+);
+
+INSERT INTO quote_topic(quote_id, topic_id)
+VALUES (1, 2), (1, 3), (2, 4), (3, 1),
+       (3, 2), (3, 3), (3, 4), (4, 2), (5, 1);
+
+select a.id, concat(a.first_name, ' ', a.last_name) 'full_name', q.content 'quote', t.name
+from authors a
+     inner join quotes q on a.id = q.author_id
+     inner join topics t on a.id = t.id
+order by a.id;
