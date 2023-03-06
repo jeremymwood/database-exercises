@@ -150,35 +150,37 @@ select DISTINCT email
 from adUsers
     inner join ads a on adUsers.id = a.adUser_id
     inner join ads_categories ac on a.id = ac.ad_id
-where a.id = 2;
+where a.id = 4;
 #what category, or categories, does it belong to?
 select categories.name
 from categories
-    inner join ads_categories ac on categories.id = ac.category_id
-    inner join ads a on ac.ad_id = a.id
+    join ads_categories ac on categories.id = ac.category_id
+    join ads a on ac.ad_id = a.id
 where a.id = 4;
 # For a given category, show all the ads that are in that category.
 select a.id, aU.email, a.title, a.description, categories.name
 from categories
-    inner join ads_categories ac on categories.id = ac.category_id
-    inner join ads a on ac.ad_id = a.id
-    inner join adUsers aU on a.adUser_id = aU.id
+    join ads_categories ac on categories.id = ac.category_id
+    join ads a on ac.ad_id = a.id
+    join adUsers aU on a.adUser_id = aU.id
 where a.id = 4;
 #     For a given user, show all the ads they have posted.
 select *
 from adUsers
     join ads a on adUsers.id = a.adUser_id
-where adUser_id = 3;
+where adUsers.email like '%jer%';
 
 #Bonus: Quiz Application
 # Design a database for a quiz-taking application.
 #
 # Specifications
 #
-# administrators
-# students
-# questions
-# answers
+# users
+    # administrators
+    # students
+# quizes
+    # questions
+    # answers
 #
 #
 #
