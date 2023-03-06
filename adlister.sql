@@ -2,9 +2,16 @@
 #users can post ads for items
 #
 # Specs:
-# Users sign up for the site with:
+# users
     # email
     # password
+# ads
+    # title
+    # description
+# item
+    # title
+    # category ("help wanted", "giveaway", or "furniture")
+
 
 use ymir_jeremy;
 
