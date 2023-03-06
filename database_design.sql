@@ -1,3 +1,26 @@
+# in class notes
+# when developing a database, think of nouns to start
+# peoples, things, broad level constructors
+# think actions or attributes for those
+# duplication infers a separate table
+# cardinality: one to one, one to many, many to many?
+# one to many needs a foreign key on the many side
+# many to many needs an associative table to mediate authors and books
+# foreign key declaration in creation statement protects unwanted deletion of one party in inner joins (referential integrity)
+# normalization- avoid duplicates
+
+# quotes table
+# m-m
+
+# authors table
+# m-m
+
+# topics table
+# m-m
+
+# quotes_topics table
+# associative table to mediate
+#
 use ymir_jeremy;
 
 CREATE TABLE authors (
@@ -16,7 +39,7 @@ drop table authors;
 
 describe authors;
 
-select *
+select concat(first_name, ' ', last_name) full_name
 from authors;
 
 CREATE TABLE quotes (
@@ -82,6 +105,11 @@ CREATE TABLE quote_topic (
 INSERT INTO quote_topic(quote_id, topic_id)
 VALUES (1, 2), (1, 3), (2, 4), (3, 1),
        (3, 2), (3, 3), (3, 4), (4, 2), (5, 1);
+
+select a.id, concat(a.first_name, ' ', a.last_name) 'full name', q.content 'quote'
+from authors a
+     inner join quotes q on a.id = q.author_id
+order by a.id;
 
 select a.id, concat(a.first_name, ' ', a.last_name) 'full name', q.content 'quote', t.name 'genre'
 from authors a

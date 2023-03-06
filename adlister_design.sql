@@ -1,4 +1,3 @@
-#design the database!
 #AdLister: small scale Craigslist clone
 #users can post ads for items
 #
