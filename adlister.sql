@@ -169,22 +169,30 @@ select *
 from adUsers
     join ads a on adUsers.id = a.adUser_id
 where adUser_id = 3;
+
 #Bonus: Quiz Application
-#     Design a database for a quiz-taking application.
+# Design a database for a quiz-taking application.
 #
-#     Specifications
+# Specifications
 #
-#     Administrators create questions
-# Administrators create answers for each question
+# administrators
+# students
+# questions
+# answers
+#
+#
+#
+#
+
+# Administrators create questions
+# Administrators create answers
 # Each question should have one correct answer
 # Administrators create quizzes
 # Quizzes have one or more questions associated with them
 # Students (users) take quizzes
 # The application should record a student's answers for each question on the quiz
+
 # Queries
-#
 # For a given student, calculate their score on a given quiz.
 # For a given quiz, find how many students have taken it.
-# Bonus
-#
 # Allow questions to have multiple correct answers
