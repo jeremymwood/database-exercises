@@ -43,16 +43,16 @@ CREATE TABLE ads (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     title VARCHAR(200) NOT NULL,
     description text NOT NULL,
-    aduser_id INT UNSIGNED NOT NULL,
+    adUser_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (aduser_id) REFERENCES adUsers (id)
+    FOREIGN KEY (adUser_id) REFERENCES adUsers (id)
 );
 
 # # Seeds
 # INSERT INTO quotes (author_id, content)
 # VALUES ((select id from authors where first_name = 'Douglas' and last_name = 'Adams'),
 #         'I love deadlines. I love the whooshing noise they make as they go by.');
-INSERT INTO ads (aduser_id, title, description)
+INSERT INTO ads (adUser_id, title, description)
 VALUES ((
     select id
     from adUsers
@@ -61,7 +61,7 @@ VALUES ((
         '1963 Aston Martin DB5, 1.3M OBO',
         'No, Mr. Bond, I expect you to drive!  Pristine condition, 20k miles, original engine, restored interior.');
 
-INSERT INTO ads (aduser_id, title, description)
+INSERT INTO ads (adUser_id, title, description)
 VALUES ((
     select id
     from adUsers
@@ -70,7 +70,7 @@ VALUES ((
         'Box of assorted rocks, $7 FIRM',
         'These are some of my favorite rocks and i just need the space in my garage.');
 
-INSERT INTO ads (aduser_id, title, description)
+INSERT INTO ads (adUser_id, title, description)
 VALUES ((
     select id
     from adUsers
@@ -79,13 +79,13 @@ VALUES ((
         'Prom dress, $200 OBO',
         'Budget conscious option.');
 
-INSERT INTO ads (aduser_id, title, description)
+INSERT INTO ads (adUser_id, title, description)
 VALUES ((
     select id
     from adUsers
     where email = 'nikki@abc.com'
     and password = 'P@ssw0rd3'),
-        'Labradoodle puppies, AKC/full vax, $400 M/F',
+        'Free Labradoodle puppies, AKC/full vax, M/F',
         'Great birthday present, AKC certified, fully vaccinated and spayed/neutered.');
 
 select *
@@ -97,9 +97,9 @@ from ads;
 CREATE TABLE categories (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(20) NOT NULL,
-    ad_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (ad_id) REFERENCES ads (id)
+#     ad_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id)
+#     FOREIGN KEY (ad_id) REFERENCES ads (id)
 );
 
 INSERT INTO categories(name) VALUES
@@ -108,8 +108,7 @@ INSERT INTO categories(name) VALUES
     ('Giveaway'),
     ('Hot deals'),
     ('Housing'),
-    ('Jobs')
-    ;
+    ('Jobs');
 
 describe categories;
 
@@ -131,29 +130,45 @@ CREATE TABLE ads_categories (
 );
 
 INSERT INTO ads_categories(ad_id, category_id)
-VALUES (1, 4), (2, 5);
+VALUES (1, 1), (1,4), (2,4), (3, 4), (4, 3);
 
 select *
 from ads_categories;
 
 # displaying kenzi for rocks, not jeremy
-select au.id, au.email, ads.title, ads.description
+select *
+#     au.id, au.email, ads.title, ads.description, c.name
 from adUsers au
-         inner join ads on au.id = ads.id
-#          inner join ads_categories ac on au.id = ac.category_id
-# order by au.id
-;
+    join ads a on au.id = a.adUser_id
+    join ads_categories ac on a.id = ac.ad_id
+    join categories c on ac.category_id = c.id;
 
 # Queries:
-# Write SQL queries to answer the following questions:
-#
 # For a given ad:
     #what is the email address of the user that created it?
-    #what category, or categories, does it belong to?
+select DISTINCT email
+from adUsers
+    inner join ads a on adUsers.id = a.adUser_id
+    inner join ads_categories ac on a.id = ac.ad_id
+where a.id = 2;
+#what category, or categories, does it belong to?
+select categories.name
+from categories
+    inner join ads_categories ac on categories.id = ac.category_id
+    inner join ads a on ac.ad_id = a.id
+where a.id = 4;
 # For a given category, show all the ads that are in that category.
+select a.id, aU.email, a.title, a.description, categories.name
+from categories
+    inner join ads_categories ac on categories.id = ac.category_id
+    inner join ads a on ac.ad_id = a.id
+    inner join adUsers aU on a.adUser_id = aU.id
+where a.id = 4;
 #     For a given user, show all the ads they have posted.
-
-
+select *
+from adUsers
+    join ads a on adUsers.id = a.adUser_id
+where adUser_id = 3;
 #Bonus: Quiz Application
 #     Design a database for a quiz-taking application.
 #
